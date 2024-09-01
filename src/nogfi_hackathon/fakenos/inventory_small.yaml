@@ -1,0 +1,16 @@
+hosts:
+  R1:
+    username: admin
+    password: admin
+    platform: hp_comware
+    port: 6000
+  R2:
+    username: admin
+    password: admin
+    platform: cisco_ios
+    port: 6001
+  R3:
+    username: admin
+    password: admin
+    platform: dell_force10
+    port: 6002

@@ -1,0 +1,11 @@
+hosts:
+  R2:
+    username: admin
+    password: admin
+    platform: cisco_ios
+    port: 6001
+  R4:
+    username: admin
+    password: admin
+    platform: huawei_vrp
+    port: 6002

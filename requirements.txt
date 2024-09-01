@@ -1,0 +1,8 @@
+napalm~=5.0.0
+nornir~=3.4.1
+pynetbox~=7.4.0
+fakenos~=1.0.1
+pydantic~=2.8.2
+pydantic-settings~=2.4.0
+scrapli~=2024.7.30
+ansible~=10.3.0

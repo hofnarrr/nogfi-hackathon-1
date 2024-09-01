@@ -1,0 +1,9 @@
+hosts:
+  ios:
+    username: admin
+    password: admin
+    platform: cisco_ios
+    port: 
+      - 6001
+      - 6100
+    replicas: 100

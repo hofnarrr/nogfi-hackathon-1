@@ -1,0 +1,10 @@
+Value domain (\S*)
+Value vlan (\d+)
+Value mac_address (([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]){2})
+Value type (dynamic|learned|permanent)
+Value protocol (\S+|[-]+)
+Value operation (bridging|filtering)
+Value interface (\d/\d+)
+
+Start
+  ^\s+${domain}\s+${vlan}\s+${mac_address}\s+${type}\s+${protocol}\s+${operation}\s+${interface}\s*$$ -> Record
