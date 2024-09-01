@@ -68,6 +68,8 @@ distro==1.9.0
     # via pyats-easypy
     # via pyats-kleenex
     # via pyats-utils
+english-words==2.0.1
+    # via nogfi-hackathon
 f5-icontrol-rest==1.3.13
     # via rest-connector
 fakenos==1.0.1
