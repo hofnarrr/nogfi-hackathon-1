@@ -10,7 +10,6 @@ IOSDEVICE1 = {
     "port": 6001,
     "transport": "asyncssh",
     "driver": AsyncIOSXEDriver,
-    
 }
 
 IOSDEVICE2 = {

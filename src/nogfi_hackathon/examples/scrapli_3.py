@@ -11,7 +11,7 @@ device = {
     "driver": AsyncIOSXEDriver,
 }
 
-devices = [device|{"port":port} for port in range(6001,6100)]
+devices = [device | {"port": port} for port in range(6001, 6100)]
 
 
 async def gather_version(device):

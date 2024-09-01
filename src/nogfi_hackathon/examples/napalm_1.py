@@ -1,19 +1,19 @@
 import napalm
 
-ios_driver = napalm.get_network_driver('ios')
-huawei_driver = napalm.get_network_driver('huawei_vrp')
+ios_driver = napalm.get_network_driver("ios")
+huawei_driver = napalm.get_network_driver("huawei_vrp")
 
 ios = {
-    'hostname': 'localhost',
-    'username': 'admin',
-    'password': 'admin',
-    'optional_args':{'port': 6001},
+    "hostname": "localhost",
+    "username": "admin",
+    "password": "admin",
+    "optional_args": {"port": 6001},
 }
 huawei = {
-    'hostname': 'localhost',
-    'username': 'admin',
-    'password': 'admin',
-    'optional_args':{'port': 6002},
+    "hostname": "localhost",
+    "username": "admin",
+    "password": "admin",
+    "optional_args": {"port": 6002},
 }
 
 
