@@ -26,10 +26,47 @@ uv enabled: true
 ```
 
 
-Once you have installed rye, clone the project and run
+Once you have installed rye, clone the project 
 
 ```bash
-rye sync
+# git clone https://github.com/rasanentimo/nogfi-hackathon-1.git
+Cloning into 'nogfi-hackathon-1'...
+remote: Enumerating objects: 82, done.
+remote: Counting objects: 100% (82/82), done.
+remote: Compressing objects: 100% (49/49), done.
+remote: Total 82 (delta 30), reused 77 (delta 25), pack-reused 0 (from 0)
+Receiving objects: 100% (82/82), 23.55 KiB | 4.71 MiB/s, done.
+Resolving deltas: 100% (30/30), done.
+```
+
+cd to the directore and run 'rye sync'
+
+```bash
+# cd nogfi-hackathon-1
+# rye sync
+Initializing new virtualenv in /root/code/nogfi-hackathon-1/.venv
+Python version: cpython@3.12.4
+Generating production lockfile: /root/code/nogfi-hackathon-1/requirements.lock
+Generating dev lockfile: /root/code/nogfi-hackathon-1/requirements-dev.lock
+Installing dependencies
+Resolved 138 packages in 885ms
+   Built nogfi-hackathon @ file:///root/code/nogfi-hackathon-1
+   Built napalm-ros @ git+https://github.com/napalm-automation-community/napalm-ros@1a4d54b1f33723ca0f637fcffeb15419e5707b08
+   Built napalm-ftos @ git+https://github.com/napalm-automation-community/napalm-ftos@2a163a74d5ba6ba0fe3b9d19f5df3541de75f8b6
+   Built english-words==2.0.1
+   Built ncclient==0.6.15
+   Built pyftpdlib==1.5.10
+   Built pyeapi==1.0.4
+   Built tftpy==0.8.0
+   Built pygnmi==0.8.14
+   Built f5-icontrol-rest==1.3.13
+   Built nornir-pygnmi==0.2.0
+   Built detect==2020.12.3
+Prepared 137 packages in 9.98s
+Installed 138 packages in 1.01s
+ + aiofiles==24.1.0
+ + aiohappyeyeballs==2.4.0
+ + aiohttp==3.10.5
 ```
 
 this will install all the needed dependencies to run the tasks.
@@ -39,6 +76,20 @@ If you prefer to manage the python env and dependencies via some other way, for 
 ```bash
 pip install -r requirements.txt
 ```
+
+you can activate the virtual env 
+```bash
+. .venv/bin/activate
+```
+
+and decativate it
+
+```bash
+deactivate
+```
+
+
+
 
 
 ## Lab devices
