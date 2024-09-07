@@ -1,0 +1,11 @@
+Value INTERFACE (\S+)
+Value DESCRIPTION (\S+)
+Value OPER (up|down)
+Value REASON (\S+)
+Value AUTONEG (on|off)
+Value SPEED (\d+)
+Value MTU (\d+)
+Value ALTERNATE_NAME (\S+)
+
+Start
+  ^${INTERFACE}\s+${DESCRIPTION}\s+${OPER}\s+${REASON}\s+${AUTONEG}\s+${SPEED}\s+${MTU}\s+${ALTERNATE_NAME} -> Record

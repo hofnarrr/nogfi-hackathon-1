@@ -28,6 +28,8 @@ dependencies = [
     "loguru~=0.7.2",
     "click~=8.1.7",
     "english-words~=2.0.1",
+    "pygnmi~=0.8.14",
+    "nornir-pygnmi~=0.2.0",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"

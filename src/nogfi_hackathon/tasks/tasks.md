@@ -123,3 +123,195 @@ The access can be tested with curl
 
 or via the provided examples examples/sonic_rest_api_1.py etc
 
+# Jinja2
+
+There's an example jinja2 template in examples/templates
+
+```jinja
+interface {{ interface }}
+ description {{ description }}
+ ip address {{ ip_address }} {{ subnet_mask }}
+ no shutdown
+```
+
+and jinja2_1.py script. The current script writes configuration for single interface and stores that to a file in configs directory.
+
+Modify the script/template so that it creates the configuration to interfaces GigabitEthernet0/1 to GigabitEthernet0/24 with so that description has text 'nogfi\-<interface number\>, i.e. interface GigabitEthernet0/1 should have description of 'nogfi-1' The IP address allocation logic '192.168.\<interface number\>.10/24', i.e GigabitEthernet0/1 should have IP 192.168.1.10/24.
+
+Modify the script/templates so that every other interface is shutdown, every 3rd has no description and every 4th has no IP address.
+
+
+## (py)gnmi
+
+
+gnmic locally on the sonic switch
+```bash
+admin@sonic:~$ docker run --network host --rm ghcr.io/openconfig/gnmic --address localhost:8080 -u admin -p admin --skip-verify -e JSON_IETF get --path /system/state/boot-time
+[
+  {
+    "source": "localhost:8080",
+    "timestamp": 1725391905543477038,
+    "time": "2024-09-03T19:31:45.543477038Z",
+    "updates": [
+      {
+        "Path": "openconfig-system:system/state/boot-time",
+        "values": {
+          "openconfig-system:system/state/boot-time": {
+            "openconfig-system:boot-time": "1725389701000000000"
+          }
+        }
+      }
+    ]
+  }
+]
+```
+gnmic
+
+```bash
+# gnmic -a clab-dell-sonic-test-leaf1:8080 -u admin -p admin --skip-verify get --path /system/state/boot-time -e json_ietf
+[
+  {
+    "source": "clab-dell-sonic-test-leaf1:8080",
+    "timestamp": 1725391928783164007,
+    "time": "2024-09-03T22:32:08.783164007+03:00",
+    "updates": [
+      {
+        "Path": "openconfig-system:system/state/boot-time",
+        "values": {
+          "openconfig-system:system/state/boot-time": {
+            "openconfig-system:boot-time": "1725389701000000000"
+          }
+        }
+      }
+    ]
+  }
+]
+```
+pygnmicli
+
+```bash
+pygnmicli -t clab-dell-sonic-test-leaf1:8080 -u admin -p admin  --skip-verify -o get -x /interfaces/interface[name=Ethernet0]/state/counters -e json_ietf
+Cannot get Common Name: list index out of range
+ssl_target_name_override is applied, should be used for testing only!
+Collecting Capabilities...
+Collection of Capabilities is successfull
+Selected encoding 'json' based on capabilities
+Collecting Capabilities...
+Collection of Capabilities is successfull
+Doing get request to ('clab-dell-sonic-test-leaf1', 8080)...
+Collecting info from requested paths (Get operation)...
+{
+    "notification": [
+        {
+            "timestamp": 1725398542049882888,
+            "prefix": null,
+            "alias": null,
+            "atomic": false,
+            "update": [
+                {
+                    "path": "openconfig-interfaces:interfaces/interface[name=Ethernet0]/state/counters",
+                    "val": {
+                        "openconfig-interfaces:counters": {
+                            "in-bits-per-second": "0",
+                            "in-broadcast-pkts": "0",
+                            "in-discards": "0",
+                            "in-errors": "0",
+                            "in-multicast-pkts": "0",
+                            "in-octets": "0",
+                            "in-octets-per-second": "0",
+                            "in-pkts": "0",
+                            "in-pkts-per-second": "0",
+                            "in-unicast-pkts": "0",
+                            "in-utilization": 0,
+                            "last-clear": "0",
+                            "out-bits-per-second": "0",
+                            "out-broadcast-pkts": "0",
+                            "out-discards": "0",
+                            "out-errors": "0",
+                            "out-multicast-pkts": "0",
+                            "out-octets": "0",
+                            "out-octets-per-second": "0",
+                            "out-pkts": "0",
+                            "out-pkts-per-second": "0",
+                            "out-unicast-pkts": "0",
+                            "out-utilization": 0
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}
+```
+
+```bash
+# pygnmicli -t clab-dell-sonic-test-leaf1:8080 -u admin -p admin  --skip-verify -o get -x /interfaces/interface[name=Ethernet0]/config -e json_ietf
+Cannot get Common Name: list index out of range
+ssl_target_name_override is applied, should be used for testing only!
+Collecting Capabilities...
+Collection of Capabilities is successfull
+Selected encoding 'json' based on capabilities
+Collecting Capabilities...
+Collection of Capabilities is successfull
+Doing get request to ('clab-dell-sonic-test-leaf1', 8080)...
+Collecting info from requested paths (Get operation)...
+{
+    "notification": [
+        {
+            "timestamp": 1725398593255766783,
+            "prefix": null,
+            "alias": null,
+            "atomic": false,
+            "update": [
+                {
+                    "path": "openconfig-interfaces:interfaces/interface[name=Ethernet0]/config",
+                    "val": {
+                        "openconfig-interfaces:config": {
+                            "description": "In",
+                            "enabled": true,
+                            "mtu": 9100,
+                            "name": "Ethernet0",
+                            "type": "iana-if-type:ethernetCsmacd"
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}
+```
+
+
+Python example
+
+```python
+from pygnmi.client import gNMIclient
+from pprint import pprint
+
+host = ('clab-dell-sonic-test-leaf1', 8080)
+
+if __name__ == '__main__':
+    with gNMIclient(target=host, username='admin', password='admin', skip_verify=True) as gc:
+        result = gc.get(path=['/system/state/boot-time'], encoding='json_ietf')
+         
+    pprint(result)
+```
+
+
+
+```bash
+# python src/nogfi_hackathon/examples/pygnmi_1.py 
+Cannot get Common Name: list index out of range
+ssl_target_name_override is applied, should be used for testing only!
+{'notification': [{'alias': None,
+                   'atomic': False,
+                   'prefix': None,
+                   'timestamp': 1725394540053831523,
+                   'update': [{'path': 'openconfig-system:system/state/boot-time',
+                               'val': {'openconfig-system:boot-time': '1725389702000000000'}}]}]}
+```
+
+
+
+
+## Nornir

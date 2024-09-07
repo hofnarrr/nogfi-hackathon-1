@@ -5,8 +5,8 @@ import random
 from english_words import get_english_words_set
 import time
 
-interface_range = range(0,77)
-web2lowerset = get_english_words_set(['web2'], lower=True)
+interface_range = range(0, 77)
+web2lowerset = get_english_words_set(["web2"], lower=True)
 
 url = "https://clab-dell-sonic-test-leaf1:443"  # change this to your switch IP
 username = "admin"
@@ -45,6 +45,7 @@ def change_inteface_name(
         response = client.patch(full_path, headers=headers, json=data)
         logger.info(f"interface {interface_name} desc changed to {description}")
 
+
 def main():
     interface_number_list = list(interface_range)
     for _ in range(200):
@@ -52,6 +53,7 @@ def main():
         description = random.choice(tuple(web2lowerset))
         change_inteface_name(interface_name=interface_name, description=description)
         time.sleep(2)
+
 
 if __name__ == "__main__":
     main()
