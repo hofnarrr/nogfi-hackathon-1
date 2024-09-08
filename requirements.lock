@@ -28,6 +28,8 @@ ansible-pylibssh==1.2.2
     # via nogfi-hackathon
 anyio==4.4.0
     # via httpx
+argcomplete==3.5.0
+    # via datamodel-code-generator
 async-lru==2.0.4
     # via pyats-log
 asyncssh==2.16.0
@@ -36,6 +38,8 @@ attrs==24.2.0
     # via aiohttp
 bcrypt==4.2.0
     # via paramiko
+black==24.8.0
+    # via datamodel-code-generator
 certifi==2024.8.30
     # via httpcore
     # via httpx
@@ -50,7 +54,10 @@ chardet==4.0.0
 charset-normalizer==3.3.2
     # via requests
 click==8.1.7
+    # via black
     # via nogfi-hackathon
+colorama==0.4.6
+    # via nornir-utils
 cryptography==43.0.0
     # via ansible-core
     # via asyncssh
@@ -58,6 +65,8 @@ cryptography==43.0.0
     # via pyats-utils
     # via pygnmi
     # via pysnmpcrypto
+datamodel-code-generator==0.26.0
+    # via pydantify
 detect==2020.12.3
     # via fakenos
 dict2xml==1.7.6
@@ -73,6 +82,10 @@ distro==1.9.0
     # via pyats-easypy
     # via pyats-kleenex
     # via pyats-utils
+dnspython==2.6.1
+    # via email-validator
+email-validator==2.2.0
+    # via pydantic
 english-words==2.0.1
     # via nogfi-hackathon
 f5-icontrol-rest==1.3.13
@@ -102,6 +115,8 @@ genie-libs-parser==24.7
     # via genie
 genie-libs-sdk==24.7
     # via genie
+genson==1.3.0
+    # via datamodel-code-generator
 gitdb==4.0.11
     # via gitpython
 gitpython==3.1.43
@@ -117,13 +132,19 @@ httpx==0.27.2
     # via nogfi-hackathon
 idna==3.8
     # via anyio
+    # via email-validator
     # via httpx
     # via requests
     # via yarl
+inflect==5.6.2
+    # via datamodel-code-generator
 intspan==1.6.1
     # via nogfi-hackathon
+isort==5.13.2
+    # via datamodel-code-generator
 jinja2==3.1.4
     # via ansible-core
+    # via datamodel-code-generator
     # via junos-eznc
     # via napalm
     # via pyats-aereport
@@ -152,6 +173,7 @@ multidict==6.0.5
     # via aiohttp
     # via yarl
 mypy-extensions==1.0.0
+    # via black
     # via nornir
 napalm==5.0.0
     # via napalm-arubaos-switch
@@ -188,16 +210,21 @@ nornir==3.4.1
     # via nogfi-hackathon
     # via nornir-napalm
     # via nornir-pygnmi
+    # via nornir-utils
 nornir-napalm==0.5.0
     # via nogfi-hackathon
 nornir-netmiko==1.0.1
     # via nogfi-hackathon
 nornir-pygnmi==0.2.0
     # via nogfi-hackathon
+nornir-utils==0.2.0
+    # via nogfi-hackathon
 ntc-templates==6.0.0
     # via netmiko
 packaging==24.1
     # via ansible-core
+    # via black
+    # via datamodel-code-generator
     # via pyats
     # via pynetbox
 paramiko==3.4.1
@@ -208,7 +235,10 @@ paramiko==3.4.1
     # via scp
     # via yang-connector
 pathspec==0.12.1
+    # via black
     # via yamllint
+platformdirs==4.3.2
+    # via black
 ply==3.11
     # via pysmi-lextudio
 prettytable==3.11.0
@@ -221,8 +251,10 @@ protobuf==5.28.0
 psutil==6.0.0
     # via pyats-aereport
     # via pyats-easypy
+    # via pydantify
 pyang==2.6.1
     # via nogfi-hackathon
+    # via pydantify
 pyasn1==0.4.8
     # via genie-libs-sdk
     # via pysnmp-lextudio
@@ -292,12 +324,16 @@ pyats-utils==24.7
 pycparser==2.22
     # via cffi
 pydantic==2.8.2
+    # via datamodel-code-generator
     # via fakenos
     # via nogfi-hackathon
     # via pydantic-settings
+    # via pydantify
 pydantic-core==2.20.1
     # via pydantic
 pydantic-settings==2.4.0
+    # via nogfi-hackathon
+pydantify==0.5.1
     # via nogfi-hackathon
 pyeapi==1.0.4
     # via napalm
@@ -330,6 +366,7 @@ python-socketio==4.6.1
     # via pyats-log
 pyyaml==6.0.2
     # via ansible-core
+    # via datamodel-code-generator
     # via fakenos
     # via junos-eznc
     # via napalm
@@ -347,6 +384,7 @@ requests==2.32.3
     # via napalm
     # via napalm-arubaos-switch
     # via pyats-kleenex
+    # via pydantify
     # via pynetbox
     # via pysmi-lextudio
     # via rest-connector
@@ -409,6 +447,7 @@ typing-extensions==4.12.2
     # via napalm
     # via pydantic
     # via pydantic-core
+    # via pydantify
 unicon==24.7
     # via genie-libs-filetransferutils
     # via pyats-connections

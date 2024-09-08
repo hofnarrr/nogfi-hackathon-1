@@ -33,6 +33,8 @@ dependencies = [
     "intspan~=1.6.1",
     "ansible~=10.3.0",
     "ansible-pylibssh~=1.2.2",
+    "nornir-utils~=0.2.0",
+    "pydantify~=0.5.1",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"

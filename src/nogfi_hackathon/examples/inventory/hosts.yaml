@@ -1,0 +1,12 @@
+---
+sw1:
+  hostname: clab-dell-sonic-test-leaf1
+  username: admin
+  password: admin
+  platform: dell-sonic
+  connection_options:
+    pygnmi:
+      port: 8080
+      extras:
+        skip_verify: True
+        # debug: True

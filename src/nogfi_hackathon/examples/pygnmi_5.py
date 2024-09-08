@@ -24,4 +24,3 @@ if __name__ == "__main__":
 
         for telemetry_entry in telemetry_stream:
             print(telemetry_entry)
-
