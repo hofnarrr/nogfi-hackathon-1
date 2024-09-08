@@ -1,0 +1,20 @@
+- name: sonic ansible
+  hosts: sonic_switches
+  gather_facts: no
+  connection: network_cli
+  tasks:
+    - name: Create vlan interface
+      dellemc.enterprise_sonic.sonic_config:
+        commands: ['interface Vlan 700','exit']
+        save: yes
+      register: config_op
+    - name: Test SONiC single command
+      dellemc.enterprise_sonic.sonic_command:
+        commands: 'show vlan'
+      register: cmd_op
+    - name: print config output
+      debug:
+        msg: "{{config_op}}"
+    - name: print show vlan output
+      debug:
+        msg: "{{cmd_op}}"

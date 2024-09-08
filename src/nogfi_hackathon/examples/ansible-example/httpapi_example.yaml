@@ -1,0 +1,14 @@
+- name: sonic ansible
+  hosts: sonic_switches
+  gather_facts: no
+  connection: httpapi
+  tasks:
+    - name: Configure interfaces
+      dellemc.enterprise_sonic.sonic_interfaces:
+        config:
+          - name: Ethernet0
+            description: 'Interface desc'
+      register: config_change
+    - name: Print config change output
+      debug:
+        msg: "{{config_change}}"

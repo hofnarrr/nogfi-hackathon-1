@@ -141,6 +141,86 @@ Modify the script/template so that it creates the configuration to interfaces Gi
 Modify the script/templates so that every other interface is shutdown, every 3rd has no description and every 4th has no IP address.
 
 
+## pyang
+
+Analyze yang models with pyang
+
+```bash
+# mkdir yang_modules
+# git clone https://github.com/openconfig/public.git
+Cloning into 'public'...
+remote: Enumerating objects: 8624, done.
+remote: Counting objects: 100% (2246/2246), done.
+remote: Compressing objects: 100% (575/575), done.
+remote: Total 8624 (delta 1881), reused 1888 (delta 1671), pack-reused 6378 (from 1)
+Receiving objects: 100% (8624/8624), 3.84 MiB | 12.99 MiB/s, done.
+Resolving deltas: 100% (5432/5432), done.
+# ls public/
+CONTRIBUTING.md  LICENSE  README.md  cloudbuild.yaml  doc  id_rsa.enc  known_hosts  regexp-tests  release  scripts  third_party
+# cp public/release/models/*.yang yang_modules/.
+# cp -R public/release/models/*/*.yang yang_modules/.
+# cp public/third_party/ietf/*.yang yang_modules/.
+# ls yang_modules/
+iana-if-type.yang                         openconfig-if-ip-ext.yang                 openconfig-platform-ext.yang
+ietf-inet-types.yang                      openconfig-if-ip.yang                     openconfig-platform-fabric.yang
+ietf-interfaces.yang                      openconfig-if-poe.yang                    openconfig-platform-fan.yang
+ietf-yang-metadata.yang                   openconfig-if-rates.yang                  openconfig-platform-healthz.yang
+ietf-yang-types.yang                      openconfig-if-sdn-ext.yang                openconfig-platform-integrated-circuit.yang
+openconfig-aaa-radius.yang                openconfig-if-tunnel.yang                 openconfig-platform-linecard.yang
+openconfig-aaa-tacacs.yang                openconfig-igmp-types.yang                openconfig-platform-pipeline-counters.yang
+openconfig-aaa-types.yang                 openconfig-igmp.yang                      openconfig-platform-port.yang
+openconfig-aaa.yang                       openconfig-inet-types.yang                openconfig-platform-psu.yang
+# pyang -f tree  -p yang_modules/ yang_modules/openconfig-interfaces.yang --tree-path=interfaces/interface/config
+module: openconfig-interfaces
+  +--rw interfaces
+     +--rw interface* [name]
+        +--rw config
+           +--rw name?            string
+           +--rw type             identityref
+           +--rw mtu?             uint16
+           +--rw loopback-mode?   oc-opt-types:loopback-mode-type
+           +--rw description?     string
+           +--rw enabled?         boolean
+# pyang -f tree  -p yang_modules/ yang_modules/openconfig-interfaces.yang --tree-path=interfaces/interface/state
+module: openconfig-interfaces
+  +--rw interfaces
+     +--rw interface* [name]
+        +--ro state
+           +--ro name?            string
+           +--ro type             identityref
+           +--ro mtu?             uint16
+           +--ro loopback-mode?   oc-opt-types:loopback-mode-type
+           +--ro description?     string
+           +--ro enabled?         boolean
+           +--ro ifindex?         uint32
+           +--ro admin-status     enumeration
+           +--ro oper-status      enumeration
+           +--ro last-change?     oc-types:timeticks64
+           +--ro logical?         boolean
+           +--ro management?      boolean
+           +--ro cpu?             boolean
+           +--ro counters
+              +--ro in-octets?             oc-yang:counter64
+              +--ro in-pkts?               oc-yang:counter64
+              +--ro in-unicast-pkts?       oc-yang:counter64
+              +--ro in-broadcast-pkts?     oc-yang:counter64
+              +--ro in-multicast-pkts?     oc-yang:counter64
+              +--ro in-errors?             oc-yang:counter64
+              +--ro in-discards?           oc-yang:counter64
+              +--ro out-octets?            oc-yang:counter64
+              +--ro out-pkts?              oc-yang:counter64
+              +--ro out-unicast-pkts?      oc-yang:counter64
+              +--ro out-broadcast-pkts?    oc-yang:counter64
+              +--ro out-multicast-pkts?    oc-yang:counter64
+              +--ro out-discards?          oc-yang:counter64
+              +--ro out-errors?            oc-yang:counter64
+              +--ro last-clear?            oc-types:timeticks64
+              +--ro in-unknown-protos?     oc-yang:counter64
+              +--ro in-fcs-errors?         oc-yang:counter64
+              +--ro carrier-transitions?   oc-yang:counter64
+              +--ro resets?                oc-yang:counter64
+```
+
 ## (py)gnmi
 
 
@@ -311,7 +391,593 @@ ssl_target_name_override is applied, should be used for testing only!
                                'val': {'openconfig-system:boot-time': '1725389702000000000'}}]}]}
 ```
 
+## Ansible
 
+There are couple of ansible examples which use the dell sonic ansible collection, https://galaxy.ansible.com/ui/repo/published/dellemc/enterprise_sonic/docs/
+
+
+```bash
+# ansible all -i inventory.ini -m ping --extra
+-vars 'ansible_user=admin ansible_password=admin'
+[WARNING]: Platform linux on host sw1 is using the discovered Python interpreter at /usr/bin/python3.7, but future installation of another Python
+interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-core/2.17/reference_appendices/interpreter_discovery.html for
+more information.
+sw1 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3.7"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+```
+
+```bash
+# ansible all -i inventory.ini -m ping --extra-vars 'ansible_user=admin ansible_password=admin'
+[WARNING]: Platform linux on host sw1 is using the discovered Python interpreter at /usr/bin/python3.7, but future installation of another Python
+interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-core/2.17/reference_appendices/interpreter_discovery.html for
+more information.
+sw1 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3.7"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+nogfi-hackathonroot@t1rasane-dev-2023:~/code/nogfi-hackathon/src/nogfi_hackathon/examples/ansible-example# ansible-playbook cli_example.yaml -i inventory.ini  --extra-vars 'ansible_user=admin ansible_password=admin'
+
+PLAY [sonic ansible] **********************************************************************************************************************************
+
+TASK [Create vlan interface] **************************************************************************************************************************
+changed: [sw1]
+
+TASK [Test SONiC single command] **********************************************************************************************************************
+ok: [sw1]
+
+TASK [print config output] ****************************************************************************************************************************
+ok: [sw1] => {
+    "msg": {
+        "changed": true,
+        "commands": [
+            "interface Vlan 700",
+            "exit"
+        ],
+        "failed": false,
+        "saved": true,
+        "updates": [
+            "interface Vlan 700",
+            "exit"
+        ]
+    }
+}
+
+TASK [print show vlan output] *************************************************************************************************************************
+ok: [sw1] => {
+    "msg": {
+        "changed": false,
+        "failed": false,
+        "stdout": [
+            "show vlan\u001b[4DVlan\nQ: A - Access (Untagged), T - Tagged\nNUM        Status      Q Ports            Autostate   Dynamic     \n700        Inactive                        Enable"
+        ],
+        "stdout_lines": [
+            [
+                "show vlan\u001b[4DVlan",
+                "Q: A - Access (Untagged), T - Tagged",
+                "NUM        Status      Q Ports            Autostate   Dynamic     ",
+                "700        Inactive                        Enable"
+            ]
+        ]
+    }
+}
+
+PLAY RECAP ********************************************************************************************************************************************
+sw1                        : ok=4    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+```
+
+
+```bash
+# ansible-playbook httpapi_example.yaml -i inventory.ini  --extra-vars 'ansible_user=admin ansible_password=admin' 
+
+PLAY [sonic ansible] **********************************************************************************************************************************
+
+TASK [Configure interfaces] ***************************************************************************************************************************
+ok: [sw1]
+
+TASK [Print config change output] *********************************************************************************************************************
+ok: [sw1] => {
+    "msg": {
+        "before": [
+            {
+                "auto_negotiate": false,
+                "description": "Interface desc",
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet0",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "description": ".................:=====..................",
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet1",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "description": "..............-===========:..............",
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet2",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "description": "...........+============:................",
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet3",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "description": ".......:*+++=========:...................",
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet4",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "description": "....-***++++======.......................",
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet5",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "description": "..=#****++++==-.......................+:.",
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet6",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "description": ".==+****+++:.........................*##.",
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet7",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "description": ".====++*-.........................######.",
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet8",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "description": ".====+++++.......:#####.......:****#####.",
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet9",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "description": ".====++++++**:=###########:-*******#####.",
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet10",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "description": "..===++++++*****########***********#####.",
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet11",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "description": ".....=+++++*******###+++***********#####.",
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet12",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "description": "....-%%%*++*******##*+++********:**#####.",
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet13",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "description": "..=%%%%%%%%#******##*+++*****:...**#####.",
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet14",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "description": ".===%%%%%%%=...***##*+++**.......**#####.",
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet15",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "description": ".====++##.........##*++..........**#####.",
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet16",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "description": ".====+++++=...................+****#####.",
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet17",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "description": ".-===++++++**+.............********####-.",
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet18",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "description": "...+=++++++*****#.......***********##*...",
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet19",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "description": "......=++++*******##-+++**********-......",
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet20",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "description": ".........-+*******##*+++*******:.........",
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet21",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "description": "............:*****##*+++****:............",
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet22",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "description": "................#*##*++++................",
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet23",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "description": "...................**=...................",
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet24",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet25",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet26",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet27",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet28",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet29",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet30",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet31",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet32",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet33",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet34",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet35",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet36",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet37",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet38",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet39",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet40",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet41",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet42",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet43",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet44",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet45",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet46",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet47",
+                "speed": "SPEED_25GB"
+            },
+            {
+                "auto_negotiate": false,
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet48",
+                "speed": "SPEED_100GB"
+            },
+            {
+                "auto_negotiate": false,
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet52",
+                "speed": "SPEED_100GB"
+            },
+            {
+                "auto_negotiate": false,
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet56",
+                "speed": "SPEED_100GB"
+            },
+            {
+                "auto_negotiate": false,
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet60",
+                "speed": "SPEED_100GB"
+            },
+            {
+                "auto_negotiate": false,
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet64",
+                "speed": "SPEED_100GB"
+            },
+            {
+                "auto_negotiate": false,
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet68",
+                "speed": "SPEED_100GB"
+            },
+            {
+                "auto_negotiate": false,
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet72",
+                "speed": "SPEED_100GB"
+            },
+            {
+                "auto_negotiate": false,
+                "enabled": true,
+                "fec": "FEC_DISABLED",
+                "mtu": 9100,
+                "name": "Ethernet76",
+                "speed": "SPEED_100GB"
+            },
+            {
+                "enabled": true,
+                "mtu": 9100,
+                "name": "Vlan700"
+            }
+        ],
+        "changed": false,
+        "commands": [],
+        "failed": false
+    }
+}
+
+PLAY RECAP ********************************************************************************************************************************************
+sw1                        : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+```
+
+### Ansible custom module
+
+There's also a simple example of creating an ansible custom 
 
 
 ## Nornir

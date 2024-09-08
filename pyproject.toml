@@ -13,7 +13,6 @@ dependencies = [
     "pydantic~=2.8.2",
     "pydantic-settings~=2.4.0",
     "scrapli[asyncssh]~=2024.7.30",
-    "ansible~=10.3.0",
     "genie~=24.7",
     "pyats~=24.7",
     "napalm-h3c-comware~=0.1.5",
@@ -30,6 +29,10 @@ dependencies = [
     "english-words~=2.0.1",
     "pygnmi~=0.8.14",
     "nornir-pygnmi~=0.2.0",
+    "pyang~=2.6.1",
+    "intspan~=1.6.1",
+    "ansible~=10.3.0",
+    "ansible-pylibssh~=1.2.2",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
