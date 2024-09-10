@@ -71,15 +71,14 @@ Installed 138 packages in 1.01s
 
 this will install all the needed dependencies to run the tasks.
 
-If you prefer to manage the python env and dependencies via some other way, for example via pip
-
-```bash
-pip install -r requirements.txt
-```
-
 you can activate the virtual env 
 ```bash
-. .venv/bin/activate
+# . .venv/bin/activate
+# python
+Python 3.12.4 (main, Jul 25 2024, 22:42:01) [Clang 18.1.8 ] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import netmiko
+>>> 
 ```
 
 and decativate it
@@ -88,9 +87,11 @@ and decativate it
 deactivate
 ```
 
+If you prefer to manage the python env and dependencies via some other way, for example via pip
 
-
-
+```bash
+pip install -r requirements.txt
+```
 
 ## Lab devices
 
@@ -102,7 +103,13 @@ FakeNOS is a simulator, it does not emulate any of Network Control, Data or Mana
 
 ### Lab device access
 
-\<add description here\>
+The lab can be accessed directly from the provided wifi network. The credentials for the lab devices are admin/admin.
+
+![alt text](docs/image.png)
+
+* juniper-vqfx 172.21.5.30
+* dell-sonic 172.21.5.40
+
 
 ### Fakenos devices
 

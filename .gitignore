@@ -9,3 +9,4 @@ wheels/
 # venv
 .venv
 *.log
+src/nogfi_hackathon/competition/tig-stack/

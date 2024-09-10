@@ -158,6 +158,9 @@ junit-xml==1.9
     # via pyats-aereport
 junos-eznc==2.7.1
     # via napalm
+    # via nogfi-hackathon
+jxmlease==1.0.3
+    # via nogfi-hackathon
 loguru==0.7.2
     # via nogfi-hackathon
 lxml==4.9.4
