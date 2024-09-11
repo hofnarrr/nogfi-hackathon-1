@@ -17,6 +17,8 @@ current_dir = pathlib.Path(__file__).parent.resolve()
 all_words = set()
 file_words = defaultdict(set)
 
+plots = defaultdict(dict)
+
 # Iterate through all files in the current directory
 for filename in os.listdir(current_dir):
     # Check if the file ends with '.txt'
@@ -27,8 +29,8 @@ for filename in os.listdir(current_dir):
         if os.path.isfile(file_path):
             words = read_story_to_list(file_path)
             # print(f"File: {filename}")
-            print(f"{filename.replace(".txt", "")} = {words}")# Empty line for better readability between files
-            
+            # print(f"{filename.replace(".txt", "")} = {words}")# Empty line for better readability between files
+            plots[filename.replace(".txt", "")]["plot"] = words
             # Add words to the file_words dictionary
             file_words[filename] = set(words)
             all_words.update(words)
@@ -41,4 +43,7 @@ print("Unique words for each file:")
 for filename, words in file_words.items():
     # Calculate words unique to this file
     unique_words = words - set.union(*(other_words for other_file, other_words in file_words.items() if other_file != filename))
-    print(f"{filename.replace(".txt", "")}_unique = {sorted(unique_words)}")
+    # print(f"{filename.replace(".txt", "")}_unique = {sorted(unique_words)}")
+    plots[filename.replace(".txt", "")]["unique"] = sorted(unique_words)
+
+print(plots)
