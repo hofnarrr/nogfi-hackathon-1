@@ -25,7 +25,7 @@ def read_story_to_a_list(storyname: str):
             story_list = s.split()
             return story_list
     except FileNotFoundError as e:
-        logger.info(f"File not found {story_file}")
+        logger.info(f"File not found {story_file} {e}")
         return []
 
 
@@ -73,7 +73,7 @@ def get_all_interfaces():
 @click.option("--storyname", "-n", default="aliens.txt", help="Name of the story")
 def main(storyname):
     logger.info(f"Script path: {script_path}")
-    logger.info(f"getting the story")
+    logger.info("getting the story")
     story = read_story_to_a_list(storyname)
     if story:
         logger.info(f"Story as list: {story}")

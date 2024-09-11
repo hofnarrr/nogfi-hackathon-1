@@ -1,0 +1,4 @@
+export username="admin"
+export password="admin"
+export host="clab-tigstack-leaf1"
+export port="8080"

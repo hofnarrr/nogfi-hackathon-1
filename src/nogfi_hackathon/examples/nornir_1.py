@@ -1,12 +1,13 @@
-# Modules
 import datetime
 from nornir.init_nornir import InitNornir
-from nornir_utils.plugins.functions import print_result
 from nornir_pygnmi.tasks import gnmi_get
 
 
 # Statics
-PATH = [f"openconfig-interfaces:interfaces/interface[name=Ethernet{interface_number}]/config" for interface_number in range(0,48)]
+PATH = [
+    f"openconfig-interfaces:interfaces/interface[name=Ethernet{interface_number}]/config"
+    for interface_number in range(0, 48)
+]
 
 
 # Body
@@ -40,8 +41,11 @@ if __name__ == "__main__":
     # print(result["sw1"][0].result)
 
     for i in result["sw1"][0].result["notification"]:
-        print(i["update"][0]["val"]["openconfig-interfaces:config"]["description"], i["update"][0]["val"]["openconfig-interfaces:config"]["name"])
+        print(
+            i["update"][0]["val"]["openconfig-interfaces:config"]["description"],
+            i["update"][0]["val"]["openconfig-interfaces:config"]["name"],
+        )
 
-    # # Get final timestamp
-    # end_time = datetime.datetime.now()
-    # print(f"Execution took {end_time - start_time} and completed at {end_time}")
+    # Get final timestamp
+    end_time = datetime.datetime.now()
+    print(f"Execution took {end_time - start_time} and completed at {end_time}")

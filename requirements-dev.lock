@@ -61,6 +61,7 @@ colorama==0.4.6
 cryptography==43.0.0
     # via ansible-core
     # via asyncssh
+    # via napalm-srl
     # via paramiko
     # via pyats-utils
     # via pygnmi
@@ -122,6 +123,7 @@ gitdb==4.0.11
 gitpython==3.1.43
     # via pyats-reporter
 grpcio==1.66.1
+    # via napalm-srl
     # via pygnmi
     # via yang-connector
 h11==0.14.0
@@ -138,6 +140,8 @@ idna==3.8
     # via yarl
 inflect==5.6.2
     # via datamodel-code-generator
+iniconfig==2.0.0
+    # via pytest
 intspan==1.6.1
     # via nogfi-hackathon
 isort==5.13.2
@@ -183,6 +187,7 @@ napalm==5.0.0
     # via napalm-ftos
     # via napalm-h3c-comware
     # via napalm-huawei-vrp
+    # via napalm-srl
     # via nogfi-hackathon
     # via nornir-napalm
 napalm-arubaos-switch==0.2.0
@@ -194,6 +199,8 @@ napalm-h3c-comware==0.1.5
 napalm-huawei-vrp==1.2.0
     # via nogfi-hackathon
 napalm-ros @ git+https://github.com/napalm-automation-community/napalm-ros@1a4d54b1f33723ca0f637fcffeb15419e5707b08
+    # via nogfi-hackathon
+napalm-srl==1.0.5
     # via nogfi-hackathon
 ncclient==0.6.15
     # via junos-eznc
@@ -230,9 +237,11 @@ packaging==24.1
     # via datamodel-code-generator
     # via pyats
     # via pynetbox
+    # via pytest
 paramiko==3.4.1
     # via fakenos
     # via napalm
+    # via napalm-srl
     # via ncclient
     # via netmiko
     # via scp
@@ -240,15 +249,20 @@ paramiko==3.4.1
 pathspec==0.12.1
     # via black
     # via yamllint
+pip==24.2
+    # via napalm-srl
 platformdirs==4.3.2
     # via black
+pluggy==1.5.0
+    # via pytest
 ply==3.11
     # via pysmi-lextudio
 prettytable==3.11.0
     # via genie
     # via pyats-aetest
     # via unicon-plugins
-protobuf==5.28.0
+protobuf==3.20.3
+    # via napalm-srl
     # via pygnmi
     # via yang-connector
 psutil==6.0.0
@@ -360,6 +374,8 @@ pysnmp-lextudio==6.1.2
     # via genie-libs-sdk
 pysnmpcrypto==0.0.4
     # via pysnmp-lextudio
+pytest==8.3.3
+    # via napalm-srl
 python-dotenv==1.0.1
     # via pydantic-settings
 python-engineio==3.14.2
@@ -413,6 +429,7 @@ setuptools==74.0.0
     # via genie-libs-clean
     # via genie-libs-health
     # via napalm
+    # via napalm-srl
     # via ncclient
     # via netmiko
     # via pyats-easypy
@@ -459,6 +476,7 @@ unicon-plugins==24.7
     # via unicon
 urllib3==2.2.2
     # via napalm-arubaos-switch
+    # via napalm-srl
     # via requests
 wcwidth==0.2.13
     # via prettytable

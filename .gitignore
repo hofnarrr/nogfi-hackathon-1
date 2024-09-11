@@ -7,6 +7,7 @@ wheels/
 *.egg-info
 
 # venv
+.envrc
 .venv
 *.log
 src/nogfi_hackathon/competition/tig-stack/

@@ -37,12 +37,14 @@ dependencies = [
     "pydantify~=0.5.1",
     "jxmlease~=1.0.3",
     "junos-eznc~=2.7.1",
+    "napalm-srl~=1.0.5",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
 
 [project.scripts]
 "nogfi-hackathon" = "nogfi_hackathon:main"
+"pygnmi-script" = "nogfi_hackathon.examples.pygnmi_6:main"
 
 [build-system]
 requires = ["pdm-backend"]

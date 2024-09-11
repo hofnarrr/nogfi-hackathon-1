@@ -1,15 +1,31 @@
 from pygnmi.client import gNMIclient
-from pprint import pprint
 import pathlib
 from loguru import logger
-from intspan import intspan
 import click
+from .settings import Settings
+import pydantic_core
+import sys
 
 current_path = pathlib.Path(__file__).parent.resolve()
 
-host = ("clab-tigstack-leaf1", 8080)
 
-interface_numbers = list(intspan("0-48,52,56,60,64,68,72,76"))
+def get_settings() -> Settings:
+    try:
+        settings = Settings()
+    except pydantic_core._pydantic_core.ValidationError as e:
+        logger.error(f"Settings are not valid: {e}")
+        sys.exit(1)
+    return settings
+
+
+def get_lines(filename) -> list[str]:
+    try:
+        with open(f"{current_path}/files/{filename}") as my_file:
+            lines = (my_file.read()).split()
+    except FileNotFoundError:
+        logger.error(f"File {current_path}/files/{filename} not found")
+        sys.exit(1)
+    return lines
 
 
 @click.command()
@@ -19,19 +35,20 @@ interface_numbers = list(intspan("0-48,52,56,60,64,68,72,76"))
     default="sonic-ascii.txt",
     help="filename for some ascii art :) Current options are 'sonic-ascii.txt' and 'sonic-logo.txt'",
 )
-def main(filename):
-    try:
-        with open(f"{current_path}/files/{filename}") as my_file:
-            lines = (my_file.read()).split()
-    except FileNotFoundError:
-        logger.error(f"File {filename} not found")
-        return
+def main(filename: str):
+    settings = get_settings()
+    lines = get_lines(filename)
+
+    host = (settings.host, settings.port)
 
     with gNMIclient(
-        target=host, username="admin", password="admin", skip_verify=True
+        target=host,
+        username=settings.username,
+        password=settings.password,
+        skip_verify=True,
     ) as gc:
         config_update = []
-        for index, interface_number in enumerate(interface_numbers):
+        for index, interface_number in enumerate(settings.interface_numbers):
             try:
                 line = lines[index]
             except IndexError:
@@ -45,7 +62,7 @@ def main(filename):
             }
             config_update.append((path, config))
         result = gc.set(update=config_update, encoding="json_ietf")
-        pprint(result)
+        logger.info(result)
 
 
 if __name__ == "__main__":

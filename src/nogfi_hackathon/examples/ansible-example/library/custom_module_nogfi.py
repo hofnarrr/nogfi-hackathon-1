@@ -63,8 +63,6 @@ def run_module():
     module_args = dict(
         prefix=dict(type="str", required=True),
         ip_offset=dict(type="int", required=True),
-        # new=dict(type='bool', required=False, default=False)
-    )
 
     # seed the result dict in the object
     # we primarily care about changed and state

@@ -1,5 +1,4 @@
 import httpx
-from pprint import pprint
 from loguru import logger
 import click
 
