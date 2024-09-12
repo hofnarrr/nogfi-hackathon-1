@@ -44,9 +44,12 @@ def get_if_update(interface, desc):
         },
     )
 
+def get_if_descs():
+    return zip(get_ifs(), get_words())
+
 def get_if_descs_update():
     updates = []
-    for pair in zip(get_ifs(), get_words()):
+    for pair in get_if_descs():
         updates.append(get_if_update(pair[0], pair[1]))
 
     return updates
@@ -63,7 +66,14 @@ if __name__ == '__main__':
         for event in sub:
             intf = event['update']['prefix'].split('=')[1].split(']')[0]
             desc = event['update']['update'][0]['val']
+            print(f'if {intf} desc changed to: {desc}')
 
+            if 'Ethernet' not in intf: continue
+
+            idx = get_ifs().index(intf)
+            newdesc = get_words()[idx]
             
-            print(f'{intf} {desc}')
+            upd = [get_if_update(intf, newdesc)]
+            gc.set(update=upd, encoding='json_ietf')
+            print(f'UPDATED {intf} DESC to {newdesc}')
 
