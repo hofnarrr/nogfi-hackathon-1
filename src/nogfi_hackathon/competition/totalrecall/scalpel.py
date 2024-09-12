@@ -1,3 +1,4 @@
+import json
 import pprint
 from pygnmi.client import gNMIclient
 import sys
@@ -59,4 +60,10 @@ if __name__ == '__main__':
         gc.set(update=get_if_descs_update(), encoding='json_ietf')
         s = gc.subscribe_stream(subscribe=if_name_change_sub)
         
+        for event in sub:
+            intf = event['update']['prefix'].split('=')[1].split(']')[0]
+            desc = event['update']['update'][0]['val']
+
+            
+            print(f'{intf} {desc}')
 
