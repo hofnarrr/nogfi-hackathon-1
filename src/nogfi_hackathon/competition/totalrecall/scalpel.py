@@ -1,11 +1,12 @@
 import pprint
 from pygnmi.client import gNMIclient
+import sys
 
 hosts = [
         ('172.21.5.40', '8080'),
         ('172.21.5.41', '8080'),
         ('172.21.5.42', '8080')
-        ]
+]
 
 if_name_change_sub = {
     "subscription": [
@@ -50,7 +51,11 @@ def get_if_descs_update():
     return updates
 
 if __name__ == '__main__':
-    with gNMIclient(target=hosts[0], username='admin', password='admin1', skip_verify=True) as gc:
+    if len(sys.argv) > 1:
+        host_index = int(sys.argv[1])
+    else:
+        host_index = 0
+    with gNMIclient(target=hosts[host_index], username='admin', password='admin1', skip_verify=True) as gc:
         gc.set(update=get_if_descs_update(), encoding='json_ietf')
         s = gc.subscribe_stream(subscribe=if_name_change_sub)
         
