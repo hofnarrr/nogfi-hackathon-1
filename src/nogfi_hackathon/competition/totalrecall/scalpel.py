@@ -58,7 +58,7 @@ if __name__ == '__main__':
         host_index = 0
     with gNMIclient(target=hosts[host_index], username='admin', password='admin1', skip_verify=True) as gc:
         gc.set(update=get_if_descs_update(), encoding='json_ietf')
-        s = gc.subscribe_stream(subscribe=if_name_change_sub)
+        sub = gc.subscribe_stream(subscribe=if_name_change_sub)
         
         for event in sub:
             intf = event['update']['prefix'].split('=')[1].split(']')[0]
