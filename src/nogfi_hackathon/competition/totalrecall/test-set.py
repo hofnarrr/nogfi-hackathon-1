@@ -3,6 +3,16 @@ import json
 
 from pygnmi.client import gNMIclient, telemetryParser
 
+with open('story.txt', 'r') as story:
+    words = story.readline().replace(',', '').replace('.', '').split(' ')
+    print(words)
+
+with open('interfaces.txt', 'r') as interfacelist:
+    interfaces = interfacelist.readline().split(' ')
+    print(interfaces)
+
+assert len(words) == len(interfaces)
+
 SONIC_HOST = os.getenv("SONIC_HOST", "172.21.5.40")
 SONIC_PORT = os.getenv("SONIC_PORT", "8080")
 SONIC_USERNAME = os.getenv("SONIC_USERNAME", "admin")
@@ -15,9 +25,20 @@ u = [
         "openconfig-interfaces:interfaces/interface[name=Ethernet1]/config",
         {
             "openconfig-interfaces:config": {
-                "description": "test-desc1",
+                "description": "test-desc3",
                 "enabled": True,
                 "name": "Ethernet1",
+                "type": "iana-if-type:ethernetCsmacd",
+            }
+        },
+    ),
+    (
+        "openconfig-interfaces:interfaces/interface[name=Ethernet2]/config",
+        {
+            "openconfig-interfaces:config": {
+                "description": "test-desc4",
+                "enabled": True,
+                "name": "Ethernet2",
                 "type": "iana-if-type:ethernetCsmacd",
             }
         },
